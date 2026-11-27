@@ -51,6 +51,27 @@ header{padding:26px 0 10px}
 .sub{margin:8px 0 0;font-size:13px;color:var(--muted)}
 .sub b{color:var(--accent);font-weight:600}
 
+/* 主题摇动开关 */
+.subrow{display:flex;align-items:center;gap:10px;margin-top:8px}
+.subrow .sub{margin:0;flex:1;min-width:0}
+.themesw{
+  position:relative;display:flex;flex:0 0 auto;
+  background:var(--paper2);border:1px solid var(--line);
+  border-radius:99px;padding:2px;
+}
+.themesw .knob{
+  position:absolute;top:2px;left:2px;width:34px;height:26px;
+  background:var(--accent);border-radius:99px;z-index:1;
+  transition:transform .24s cubic-bezier(.32,.72,0,1);
+}
+.themesw button{
+  position:relative;z-index:2;width:34px;height:26px;border:0;
+  background:transparent;color:var(--muted);font-size:13px;
+  cursor:pointer;border-radius:99px;line-height:1;padding:0;
+  transition:color .2s;
+}
+.themesw button.on{color:#fff}
+
 /* ---------- 卡片列表 ---------- */
 .list{margin-top:18px;display:flex;flex-direction:column;gap:11px}
 .card{
@@ -121,6 +142,63 @@ body.pink{
     radial-gradient(circle at 85% 80%, rgba(110,139,61,.03), transparent 45%),
     repeating-linear-gradient(0deg, rgba(180,130,150,.02) 0 1px, transparent 1px 3px);
 }
+
+/* 黑夜主题 */
+body.dark{
+  --paper:#191716;
+  --paper2:#252120;
+  --card:#211E1D;
+  --ink:#EDE6DF;
+  --ink2:#C6BBB1;
+  --muted:#8B8078;
+  --line:#37322F;
+  --accent:#D08A5A;
+  --red:#E06B5A;
+  --green:#8FAF5E;
+  --yellow:#C9A227;
+  background-image:
+    radial-gradient(circle at 20% 10%, rgba(208,138,90,.05), transparent 45%),
+    radial-gradient(circle at 85% 80%, rgba(143,175,94,.04), transparent 45%);
+}
+body.dark .warn{background:#3A2320;border-color:#5C3530;border-left-color:var(--red)}
+body.dark .warn .wt{color:#E8907E}
+body.dark .warn .wb, body.dark .warn .wa{color:#D9B8B1}
+body.dark .warn .wa{border-top-color:#5C3530}
+body.dark .warn.forbid{background:#331F1C;border-color:#6B3A33}
+body.dark .warn.forbid .wt{color:#F0917E}
+body.dark .warn.forbid .wb{color:#DDB5AD}
+body.dark .warn.forbid .wb b{color:#F0917E}
+body.dark .warn.forbid .exc{color:#C79E96;border-top-color:#5C3530}
+body.dark .handle{background:#1E2C31;border-color:#2E4A54;border-left-color:#5E93A8}
+body.dark .handle .wt{color:#8FC4D6}
+body.dark .handle .wb, body.dark .handle .wa{color:#A9C2CC}
+body.dark .handle .wa{border-top-color:#2E4A54}
+body.dark .cook{background:#332818;border-color:#54401F;border-left-color:#C8873A}
+body.dark .cook .wt{color:#E0A860}
+body.dark .cook .wb, body.dark .cook .wa{color:#D3BC9A}
+body.dark .cook .wa{border-top-color:#54401F}
+body.dark .wine{background:#2E2230;border-color:#4A3450;border-left-color:#A87BB8}
+body.dark .wine .wt{color:#C79BD6}
+body.dark .wine .wb, body.dark .wine .wa{color:#C3B0CB}
+body.dark .wine .wa{border-top-color:#4A3450}
+body.dark .wine .exc{color:#9C86A6}
+body.dark .mod{background:#26301F;border-color:#3E4F30;border-left-color:#7A8F5A}
+body.dark .mod .wt{color:#A8C47F}
+body.dark .mod .wb, body.dark .mod .wa{color:#BACBA4}
+body.dark .mod .wa{border-top-color:#3E4F30}
+body.dark .civil{background:#2C2820;border-color:#4A4234;border-left-color:#9A8B63}
+body.dark .civil .wt{color:#C9B98F}
+body.dark .civil .wb{color:#C0B79E}
+body.dark .civil .alt{border-top-color:#4A4234;color:#A79C83}
+body.dark .snote{background:#332818;border-color:#54401F;color:#D3BC9A}
+body.dark .tag{background:#2E2A27;color:#C6BBB1}
+body.dark .tag.open{background:#3A2A1E;color:var(--accent)}
+body.dark .tag.risk{background:#3A2320;color:#F0917E}
+body.dark .tag.frozen{background:#1E2C31;color:#8FC4D6}
+body.dark .toast{background:rgba(240,235,230,.92);color:#1A1A1A}
+body.dark .mask{background:rgba(0,0,0,.55)}
+body.dark .sheet{box-shadow:0 -8px 40px rgba(0,0,0,.5)}
+body.dark .credit{opacity:.6}
 
 /* ---------- 悬浮按钮 ---------- */
 .fab{
@@ -389,7 +467,10 @@ select{
       <div class="brand">冰箱食材管理系统</div>
       <div class="clock"><b id="clock">--:--</b><span id="clockdate"></span></div>
     </div>
-    <p class="sub" id="sub"></p>
+    <div class="subrow">
+      <p class="sub" id="sub"></p>
+      <div class="themesw" id="themesw"></div>
+    </div>
   </header>
   <div class="list" id="list"></div>
   <div class="credit">思維與技巧工作室 出品</div>
@@ -573,7 +654,7 @@ function baseDays(food, storage){
    状态
    ========================================================= */
 const LS_KEY = 'zhizhiv1';
-const APP_VERSION = 'v0.15';
+const APP_VERSION = 'v0.16';
 
 let state = {
   items: [],
@@ -586,7 +667,34 @@ let purgeNote = null;
 function save(){ localStorage.setItem(LS_KEY, JSON.stringify(state)); }
 
 function applyTheme(){
-  document.body.classList.toggle('pink', !!state.settings.pink);
+  const t = state.settings.theme || (state.settings.pink ? 'pink' : 'light');
+  document.body.classList.toggle('pink', t === 'pink');
+  document.body.classList.toggle('dark', t === 'dark');
+}
+
+function themeUnlocked(){
+  return !!(state.settings.pink || state.settings.theme === 'pink');
+}
+
+function renderThemeSwitch(){
+  const sw = $('#themesw');
+  if (!sw) return;
+  const cur = state.settings.theme || (state.settings.pink ? 'pink' : 'light');
+  const opts = [['light', '☀'], ['dark', '☾']];
+  if (themeUnlocked()) opts.push(['pink', '♡']);
+  sw.style.width = (opts.length * 34 + 4) + 'px';
+  sw.innerHTML = '<i class="knob"></i>' + opts.map(([k, ic]) =>
+    `<button data-theme="${k}" class="${k === cur ? 'on' : ''}">${ic}</button>`).join('');
+  const idx = Math.max(0, opts.findIndex(o => o[0] === cur));
+  sw.querySelector('.knob').style.transform = `translateX(${idx * 34}px)`;
+  $$('#themesw button').forEach(b => {
+    b.onclick = () => {
+      state.settings.theme = b.dataset.theme;
+      save();
+      applyTheme();
+      renderThemeSwitch();
+    };
+  });
 }
 function load(){
   try{
@@ -1233,7 +1341,9 @@ function commitDraft(){
   let msg = `${name} 记下了`;
   if (!state.settings.pink && /蛋糕/.test(name) && Number(draft.days) === 723){
     state.settings.pink = true;
+    state.settings.theme = 'pink';
     applyTheme();
+    renderThemeSwitch();
     msg = '🎂 723 天，粉色的事情发生了';
   }
 
@@ -1430,7 +1540,7 @@ function renderSettings(){
       <div class="disclaimer" style="margin-bottom:9px">
         食材库 ${FOODS.length} 种 · ${TOPS.length - 1} 个大类 · 覆盖华北、东北、华东、华中、华南、西南、西北、新疆。
       </div>
-      ${state.settings.pink ? '<button class="btn small" id="sPink" style="margin-bottom:9px">关闭粉色主题</button>' : ''}
+      ${''}
       <div class="row2">
         <button class="btn small" id="sExport">导出备份</button>
         <button class="btn small" id="sImport">导入备份</button>
@@ -1538,6 +1648,7 @@ setInterval(render, 60 * 1000);
 load();
 applyTheme();
 render();
+renderThemeSwitch();
 if (purgeNote) setTimeout(() => toast(purgeNote), 500);
 </script>
 </body>
