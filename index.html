@@ -557,7 +557,7 @@ function baseDays(food, storage){
    状态
    ========================================================= */
 const LS_KEY = 'zhizhiv1';
-const APP_VERSION = 'v0.9';
+const APP_VERSION = 'v0.10';
 
 let state = {
   items: [],
@@ -753,7 +753,7 @@ function civilBlock(item, q){
 
 function cookBlock(c){
   return `<div class="cook">
-    <div class="wt">🍳 必须烧熟 · ${c.tag}</div>
+    <div class="wt">🍳 ${c.label || '必须烧熟'} · ${c.tag}</div>
     <div class="wb">${c.body}</div>
     <div class="wa"><b>怎么做：</b>${c.action}</div>
   </div>`;
