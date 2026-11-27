@@ -854,6 +854,11 @@ const MOD_RISKS = {
     body: '健康成年人每天咖啡因上限约 400 毫克，一瓶瓶装咖啡差不多就用掉一半。下午喝还会影响当晚睡眠。',
     action: '一天别超过两瓶，下午三点后不喝。'
   },
+  caffeineTea: {
+    tag: '咖啡因',
+    body: '港式奶茶用的是浓茶底，一杯的咖啡因大约 100–170 毫克，跟一杯咖啡差不多；茶餐厅的「茶走」还要更浓。',
+    action: '下午三点以后别喝，会影响当晚睡眠。一天一杯就够；孕妇每天咖啡因控制在 200 毫克以内。'
+  },
   litchi: {
     tag: '荔枝',
     body: '空腹大量吃荔枝会引起低血糖，也就是「荔枝病」，儿童尤其危险。这不是上火，是血糖真的掉下来了。',
@@ -877,8 +882,9 @@ const MOD_FOODS = {
   huotuichang:'cured', wucanrou:'cured', xianyu2:'cured', saladmi:'cured', paermahuotui:'cured',
   xiandan:'salty', pidan:'salty', zhacai:'salty',
   kele:'sugary', xuebi:'sugary', chengzhi:'sugary', pingguozhi:'sugary',
-  yundongyinliao:'sugary', pingzhuangcha:'sugary',
+  yundongyinliao:'sugary',
   pingzhuangkafei:'caffeine',
+  gangshinaicha:'caffeineTea',
   lizhi:'litchi',
   shizi:'persimmon', shanzha:'persimmon',
   niangao:'sticky', tangyuan:'sticky', zongzi:'sticky', ciba:'sticky',
