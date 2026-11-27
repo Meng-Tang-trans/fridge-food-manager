@@ -756,9 +756,14 @@ const COOK_RISKS = {
     action: '切薄、炒到完全变色看不到血水，炖肉中心要到 70℃ 以上。别做半生的「嫩猪排」，也别尝生肉馅。'
   },
   beef: {
-    tag: '牛带绦虫',
-    body: '牛肉可能带牛带绦虫的囊尾蚴。生吃、半生吃（包括所谓的三分熟）都有感染风险。',
-    action: '涮肉、肉馅、卤牛肉一定要全熟。整块牛排如果要吃半生，得是来源可靠的整切肉，别用拼接肉。'
+    tag: '碎肉才是重点',
+    body: '牛肉的风险主要不在整块肉上，而在碎肉里：绞碎、拼接的肉会把表面的细菌带到内部，牛带绦虫在正规渠道的牛肉里也已经不多见。',
+    action: '整块牛排按自己喜欢的熟度煎，但切面要封住。牛肉馅、涮肉、卤牛肉、汉堡肉饼一定全熟——这几样没有"三分熟"的余地。'
+  },
+  poultry: {
+    tag: '沙门氏菌 / 弯曲杆菌',
+    body: '鸡肉是家庭厨房里最常见的食源性致病菌来源。沙门氏菌和弯曲杆菌几乎存在于每一块生鸡肉表面，而且冲洗生鸡时的水花会把细菌溅到水槽、砧板和旁边的食物上。',
+    action: '不要用水冲洗生鸡肉，直接下锅。中心温度要过 74℃，不见血水。碰过生鸡的手、刀、砧板立刻洗，别去碰凉菜。'
   },
   mutton: {
     tag: '布鲁氏菌',
@@ -782,6 +787,8 @@ const COOK_FOODS = {
   zhuti:'pork', zhugan:'pork', zhuyao:'pork', zhudu:'pork',
   niunan:'beef', niujian:'beef', niujin:'beef', niuwei:'beef',
   yangrou:'mutton', yangpai:'mutton',
+  jixiongrou:'poultry', jitui:'poultry', zhengji:'poultry',
+  jichi:'poultry', jizhua:'poultry', jizhen:'poultry',
   xianyu:'fresh', jiyu:'fresh', caoyu:'fresh', niuga:'fresh',
   biqi:'water', lingjiao:'water', lianou:'water',
 };
