@@ -106,6 +106,22 @@ header{padding:26px 0 10px}
   letter-spacing:.8px;opacity:.75;margin:40px 0 0;
 }
 
+/* 🎂 彩蛋：蛋糕 × 723 天解锁的粉色主题 */
+body.pink{
+  --paper:#FDF3F5;
+  --paper2:#F8E3E9;
+  --card:#FFFBFC;
+  --ink:#3B2A2F;
+  --ink2:#6B5157;
+  --muted:#A9909A;
+  --line:#F1DCE1;
+  --accent:#C8607F;
+  background-image:
+    radial-gradient(circle at 20% 10%, rgba(200,96,127,.05), transparent 45%),
+    radial-gradient(circle at 85% 80%, rgba(110,139,61,.03), transparent 45%),
+    repeating-linear-gradient(0deg, rgba(180,130,150,.02) 0 1px, transparent 1px 3px);
+}
+
 /* ---------- 悬浮按钮 ---------- */
 .fab{
   position:fixed;right:calc(50% - 260px + 18px);bottom:28px;
@@ -557,7 +573,7 @@ function baseDays(food, storage){
    状态
    ========================================================= */
 const LS_KEY = 'zhizhiv1';
-const APP_VERSION = 'v0.14';
+const APP_VERSION = 'v0.15';
 
 let state = {
   items: [],
@@ -568,6 +584,10 @@ let state = {
 let purgeNote = null;
 
 function save(){ localStorage.setItem(LS_KEY, JSON.stringify(state)); }
+
+function applyTheme(){
+  document.body.classList.toggle('pink', !!state.settings.pink);
+}
 function load(){
   try{
     const raw = localStorage.getItem(LS_KEY);
@@ -1208,10 +1228,19 @@ function commitDraft(){
   };
   state.items.push(item);
   if (draft.food) state.recent[draft.food.id] = Date.now();
+
+  // 🎂 彩蛋：一条「蛋糕」，保质期 723 天
+  let msg = `${name} 记下了`;
+  if (!state.settings.pink && /蛋糕/.test(name) && Number(draft.days) === 723){
+    state.settings.pink = true;
+    applyTheme();
+    msg = '🎂 723 天，粉色的事情发生了';
+  }
+
   save();
   render();
   closeSheet();
-  toast(`${name} 记下了`);
+  toast(msg);
   draft = null;
 }
 
@@ -1401,6 +1430,7 @@ function renderSettings(){
       <div class="disclaimer" style="margin-bottom:9px">
         食材库 ${FOODS.length} 种 · ${TOPS.length - 1} 个大类 · 覆盖华北、东北、华东、华中、华南、西南、西北、新疆。
       </div>
+      ${state.settings.pink ? '<button class="btn small" id="sPink" style="margin-bottom:9px">关闭粉色主题</button>' : ''}
       <div class="row2">
         <button class="btn small" id="sExport">导出备份</button>
         <button class="btn small" id="sImport">导入备份</button>
@@ -1433,6 +1463,16 @@ function renderSettings(){
   $('#sExport').onclick = exportData;
   $('#sImport').onclick = () => $('#sFile').click();
   $('#sFile').onchange = importData;
+  const pinkBtn = $('#sPink');
+  if (pinkBtn){
+    pinkBtn.onclick = () => {
+      state.settings.pink = false;
+      save();
+      applyTheme();
+      renderSettings();
+      toast('已关闭粉色主题');
+    };
+  }
 }
 
 function exportData(){
@@ -1496,6 +1536,7 @@ setInterval(render, 60 * 1000);
 
 /* 启动 */
 load();
+applyTheme();
 render();
 if (purgeNote) setTimeout(() => toast(purgeNote), 500);
 </script>
