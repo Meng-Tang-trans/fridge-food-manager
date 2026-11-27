@@ -797,6 +797,12 @@ const COOK_RISKS = {
     body: '荸荠、菱角、莲藕长在水里，表面可能附着姜片虫的囊蚴。生吃、用牙啃皮都可能感染。',
     action: '削皮前先洗干净，最好焯一下或煮熟再吃。别用牙啃皮。'
   },
+  nitrite: {
+    label: '必先焯水',
+    tag: '亚硝酸盐',
+    body: '香椿的硝酸盐含量在蔬菜里算很高的，放久了会转成亚硝酸盐，老叶比嫩芽高得多。室温放一天，亚硝酸盐能翻好几倍。',
+    action: '选嫩芽、现买现吃，别囤着。下锅前先用沸水焯 1 分钟——这一步能去掉大部分亚硝酸盐，别省。焯完再炒或凉拌。'
+  },
 };
 
 const COOK_FOODS = {
@@ -808,6 +814,7 @@ const COOK_FOODS = {
   jichi:'poultry', jizhua:'poultry', jizhen:'poultry',
   xianyu:'fresh', jiyu:'fresh', caoyu:'fresh', niuga:'fresh',
   biqi:'water', lingjiao:'water', lianou:'water',
+  xiangchun:'nitrite',
 };
 for (const [id, key] of Object.entries(COOK_FOODS)){
   const f = FOOD_MAP[id];
