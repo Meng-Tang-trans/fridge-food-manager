@@ -191,12 +191,15 @@ select{
 .recent-label{font-size:11px;color:var(--muted);margin:14px 0 7px;letter-spacing:.4px}
 
 /* 分类选择条 */
+/* 分类条：自动换行，全部可见；地域条仍横向滑动 */
 .chips{
-  display:flex;gap:7px;overflow-x:auto;margin:0 -20px;padding:2px 20px 10px;
+  display:flex;flex-wrap:wrap;gap:7px;margin:0 0 10px;
+}
+.chips.second{
+  flex-wrap:nowrap;overflow-x:auto;margin:0 -20px;padding:0 20px 9px;
   scrollbar-width:none;-webkit-overflow-scrolling:touch;
 }
 .chips::-webkit-scrollbar{display:none}
-.chips.second{padding-top:0;padding-bottom:8px}
 .chip{
   flex:0 0 auto;padding:7px 13px;border-radius:99px;border:1px solid var(--line);
   background:var(--card);font-size:13px;font-family:inherit;color:var(--ink2);
@@ -548,7 +551,7 @@ function baseDays(food, storage){
    状态
    ========================================================= */
 const LS_KEY = 'zhizhiv1';
-const APP_VERSION = 'v0.6';
+const APP_VERSION = 'v0.7';
 
 let state = {
   items: [],
