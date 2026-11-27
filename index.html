@@ -873,8 +873,27 @@ let activeCat = '常用';
 let activeRegion = '';
 
 function syncChips(){
-  $$('#chips .chip').forEach(x => x.classList.toggle('on', x.dataset.cat === activeCat && !activeRegion));
+  $$('#chips .chip').forEach(x => x.classList.toggle('on', x.dataset.cat === activeCat));
   $$('#chips2 .chip').forEach(x => x.classList.toggle('on', (x.dataset.region || '') === activeRegion));
+}
+
+function buildRegionChips(){
+  const box2 = $('#chips2');
+  if (!box2) return;
+  box2.innerHTML = ['全部', ...Object.keys(REGION_FOODS)].map(r => {
+    const val = r === '全部' ? '' : r;
+    return `<button class="chip ${val === activeRegion ? 'on' : ''}" data-region="${val}">${r}</button>`;
+  }).join('');
+  $$('#chips2 .chip').forEach(b => {
+    b.onclick = () => {
+      activeRegion = b.dataset.region || '';
+      $$('#chips2 .chip').forEach(x => x.classList.toggle('on', (x.dataset.region || '') === activeRegion));
+      try { b.scrollIntoView({ inline: 'center', block: 'nearest' }); } catch (e) {}
+      drawResults();
+      const body = $('#addBody');
+      if (body) body.scrollTop = 0;
+    };
+  });
 }
 
 function renderChips(){
@@ -884,29 +903,10 @@ function renderChips(){
     `<button class="chip" data-cat="${c}">${c}</button>`
   ).join('');
 
-  const box2 = $('#chips2');
-  if (box2){
-    box2.innerHTML = ['全部', ...Object.keys(REGION_FOODS)].map(r => {
-      const val = r === '全部' ? '' : r;
-      return `<button class="chip" data-region="${val}">${r}</button>`;
-    }).join('');
-  }
-
   $$('#chips .chip').forEach(b => {
     b.onclick = () => {
       activeCat = b.dataset.cat;
       activeRegion = '';
-      syncChips();
-      try { b.scrollIntoView({ inline: 'center', block: 'nearest' }); } catch (e) {}
-      drawResults();
-      const body = $('#addBody');
-      if (body) body.scrollTop = 0;
-    };
-  });
-  $$('#chips2 .chip').forEach(b => {
-    b.onclick = () => {
-      activeRegion = b.dataset.region || '';
-      if (activeRegion) activeCat = '常用';
       syncChips();
       try { b.scrollIntoView({ inline: 'center', block: 'nearest' }); } catch (e) {}
       drawResults();
@@ -965,26 +965,40 @@ function drawResults(){
     return;
   }
 
-  // 无输入 → 按分类或地域罗列
+  // 无输入 → 按分类罗列
+  const isLocal = activeCat === '地方风物';
   showChips(true);
+  if (chips2) chips2.style.display = isLocal ? '' : 'none';
 
-  // 地域视角：按省份细分
-  if (activeRegion){
-    const list = FOODS.filter(f => f.region === activeRegion);
-    const groups = {};
-    for (const f of list){
-      const k = f.prov || '其他';
-      if (!groups[k]) groups[k] = [];
-      groups[k].push(f);
-    }
-    const keys = Object.keys(groups).sort((a, b) => {
-      const ia = PROV_ORDER.indexOf(a), ib = PROV_ORDER.indexOf(b);
-      return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib);
-    });
-    let html = `<div class="recent-label">${activeRegion} · ${list.length} 种</div>`;
-    for (const k of keys){
-      html += `<div class="recent-label">${k} · ${groups[k].length}</div>`;
-      html += groups[k].map(f => resultRow(f, '', true, true)).join('');
+  // 地方风物：先选大区，再按省份细分
+  if (isLocal){
+    buildRegionChips();
+    const list = activeRegion
+      ? FOODS.filter(f => f.region === activeRegion)
+      : FOODS.filter(f => f.region);
+    let html = `<div class="recent-label">地方风物 · ${list.length} 种</div>`;
+    if (activeRegion){
+      const groups = {};
+      for (const f of list){
+        const k = f.prov || '其他';
+        if (!groups[k]) groups[k] = [];
+        groups[k].push(f);
+      }
+      const keys = Object.keys(groups).sort((a, b) => {
+        const ia = PROV_ORDER.indexOf(a), ib = PROV_ORDER.indexOf(b);
+        return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib);
+      });
+      for (const k of keys){
+        html += `<div class="recent-label">${k} · ${groups[k].length}</div>`;
+        html += groups[k].map(f => resultRow(f, '', true, true)).join('');
+      }
+    } else {
+      for (const r of Object.keys(REGION_FOODS)){
+        const sub = list.filter(f => f.region === r);
+        if (!sub.length) continue;
+        html += `<div class="recent-label">${r} · ${sub.length}</div>`;
+        html += sub.map(f => resultRow(f, '', true, true)).join('');
+      }
     }
     box.innerHTML = html;
     return;
@@ -1042,9 +1056,8 @@ function resultRow(f, q, hideCat, hideRegion){
     const bm = norm(b).includes(qs) ? 0 : 1;
     return am - bm;
   });
+  // 地域只在「地方风物」里以分组标题出现，列表行里不重复
   const parts = [];
-  const loc = f.prov || f.region;
-  if (loc && !hideRegion) parts.push(`<b style="color:var(--accent)">${loc}</b>`);
   const nowM = new Date().getMonth() + 1;
   if (Array.isArray(f.months) && f.months.includes(nowM)) parts.push('<b style="color:var(--green)">当季</b>');
   if (f.cat && !hideCat) parts.push(f.cat);
