@@ -571,6 +571,22 @@ const FOODS = [
   F('gangshinaicha','港式奶茶','饮料',['丝袜奶茶'],'',null,3,null,'fridge','开封后当天喝完',1),
   F('aomenxingrenbing','澳门杏仁饼','烘焙',[],'',30,null,null,'room','密封防潮，受潮不酥'),
   F('wuyuzi','乌鱼子','水产',[],'',null,15,90,'fridge','冷冻更好切，切片烤或煎'),
+
+  /* ══ 华南常用 ═══════════════════════════ */
+  F('dajiao','大蕉','水果',['芭蕉'],'',7,null,null,'room','比香蕉粉，适合煮糖水或炸'),
+  F('meicai','梅菜','加工食品',['梅菜干','惠州梅菜'],'',365,null,null,'room','广东的梅菜，和浙江梅干菜不是一回事'),
+  F('shage','沙葛','根茎',['凉薯','豆薯'],'',14,30,null,'room','生吃脆甜，剥皮后尽快吃'),
+  F('fenge','粉葛','根茎',['葛根','葛'],'',7,14,null,'fridge','煲汤用，淀粉多，容易生虫'),
+  F('zhuzhe','竹蔗','水果',['青皮蔗'],'',7,14,null,'room','煮竹蔗水，皮别削太早'),
+  F('mumianhua','木棉花','干货',['木棉'],'',365,null,null,'room','广东煲汤祛湿，晒干后密封'),
+  F('luohanguo','罗汉果','干货',[],'',365,null,null,'room','掰开煮水，甜度高但几乎不含糖'),
+  F('shatangju','沙糖桔','水果',['砂糖橘','四会桔'],'',7,14,null,'room','皮薄易碰伤，放久了会软'),
+  F('wogan','沃柑','水果',[],'',7,14,null,'room','比沙糖桔耐放，晚熟品种'),
+  F('huangdenglongjiao','黄灯笼椒','瓜果',['黄帝椒','海南黄椒'],'',3,7,null,'fridge','很辣，做酱用，别当青椒下锅'),
+  F('puningdoujiang','普宁豆酱','调味',['豆酱'],'',365,null,null,'room','潮汕的，开封后冷藏',90),
+  F('ganlancai','橄榄菜','加工食品',['潮汕橄榄菜'],'',365,365,null,'room','开封后冷藏',90),
+  F('nanjiang','南姜','调味',['芦苇姜','大高良姜'],'',7,14,null,'room','潮汕卤味用，香味和生姜不同'),
+  F('lingyu','鲮鱼','水产',['土鲮'],'',null,1,90,'fridge','刺多，常打成鱼滑或做罐头'),
 ];
 
 const FOOD_MAP = Object.fromEntries(FOODS.map(f => [f.id, f]));
@@ -938,6 +954,8 @@ const DRY_ROUTE = {
   wuzhimaotao:['蔬菜','干制'], juecaigan:['蔬菜','干制'],
   /* 海产干货 */
   xiapii:['水产',''], ganbei:['水产',''], kunbu:['水产',''], muyuhua:['水产',''], haitai:['水产',''],
+  /* 华南干货 */
+  mumianhua:['蔬菜','干制'], luohanguo:['坚果果干','果干'],
 };
 
 for (const f of FOODS){
@@ -1094,6 +1112,7 @@ const PINYIN = {
   '槟':'bing','橄':'gan','欧':'ou','气':'qi','汁':'zhi','汉':'han','泉':'quan','法':'fa','淋':'lin','清':'qing',
   '烧':'shao','片':'pian','特':'te','瓶':'ping','盖':'gai','矿':'kuang','碧':'bi','箭':'jian','糠':'kang','纳':'na',
   '作':'zuo','农':'nong','坊':'fang','家':'jia','自':'zi','豚':'tun','鲀':'tun','港':'gang','澳':'ao','门':'men','台':'tai','湾':'wan','袜':'wa','顶':'ding',
+  '会':'hui','帝':'di','惠':'hui','普':'pu','柑':'gan','棉':'mian','沃':'wo','灯':'deng','砂':'sha','笼':'long','糖':'tang','良':'liang','苇':'wei','葛':'ge','鲮':'ling',
   '丹':'dan','井':'jing','信':'xin','县':'xian','城':'cheng','增':'zeng','宁':'ning','宜':'yi','宾':'bin','岩':'yan','川':'chuan','常':'chang','库':'ku','徐':'xu','攀':'pan','昌':'chang','桔':'ju','武':'wu','汕':'shan','洛':'luo','津':'jin','洪':'hong','湖':'hu','滨':'bin','滩':'tan','潍':'wei','潮':'chao','澄':'cheng','煎':'jian','盐':'yan','粒':'li','羌':'qiang','若':'ruo','螺':'luo','连':'lian','遥':'yao','闻':'wen','阳':'yang','阿':'a','鳊':'bian',
   '罗':'luo','胚':'pei','芬':'fen','苏':'su','英':'ying','萨':'sa','蒡':'bang','装':'zhuang','运':'yun','迭':'die',
   '迷':'mi','雕':'diao','鞋':'xie','颂':'song','饮':'yin','鲔':'wei','鳗':'man'
@@ -1182,7 +1201,7 @@ const REGION_FOODS = {
   '东北': ['suancai','dajiang','zhenmo','houtougu','songzi','dongli','gaoliangmi','niandoubao','xuechang','labaiicai','lengmian','mingtaiyu','wuchangdami','haerbinhongchang','dalianhaishen','dandongcaomei'],
   '华东': ['cigu','chuncai','malantou','caotou','luhao','shuiqin','lingjiao','jitoumi','xuecai','meigancai','sungan','jinhualhuotui','xianrou','huangshan','youmianjin','jiuniang','jimaocai','takuocai','jiayu','hetun','longjingcha','biluochun','nanjingshuiyaya','huangyanmiju','yangchengdazhaxie'],
   '华中': ['lihao','douchi','duolajiao','suandoujiao','oudai','yugao','ciba','zhacai','chayou','layu','shaofen','wuchangyu','xinyangmaojian','yichangmiju','hongshancaotai'],
-  '华南': ['youmaicai','jiegua','xiyangcai','shanzhu','huangpi','chenpi','xianyu2','yufu','shachajiang','zhuhoujiang','haixianjiang','caigan','bawanghua','suansun','wuzhimaotao','yangtao','jiecai','mushu','chaoshanxianniuwan','zengchengguahailizhi','xuwenboluo','wenchangji','meizhoujinyou','shajinghao'],
+  '华南': ['youmaicai','jiegua','xiyangcai','shanzhu','huangpi','chenpi','xianyu2','yufu','shachajiang','zhuhoujiang','haixianjiang','caigan','bawanghua','suansun','wuzhimaotao','yangtao','jiecai','mushu','chaoshanxianniuwan','zengchengguahailizhi','xuwenboluo','wenchangji','meizhoujinyou','shajinghao','dajiao','meicai','shage','fenge','zhuzhe','mumianhua','luohanguo','shatangju','wogan','huangdenglongjiao','puningdoujiang','ganlancai','nanjiang','lingyu'],
   '西南': ['zheergen','ercai','wandouxian','paojiao','paojiang','erjingtiao','qinghuajiao','songrong','niuganjun','jianshouqing','jizong','ganbajun','erkui','rushan','xuanweihuotui','zaolajiao','suantang','maoniurou','qingke','suyou','zanba','yibinyacai','mengzishiliu','panzhihuamangguo','yunnanxiaolikafei','zhacai'],
   '西北': ['lanzhoubaihe','shacong','juema','juecaigan','humayou','liangpi','kukucai','youmian','huangmi','jiangshui','hongzun','nixiatanyang','luochuanpingguo'],
   '新疆': ['nang','badanmu','putaogan','xinggan','wuhuaguogan','naigeda','shazao','yingzuidou','shaji','machangzi','tuonai','kuerlexiangli','akesupingguo','ruoqianghongzao'],
@@ -1224,6 +1243,9 @@ const PROV = {
   haixianjiang:'广东', caigan:'广东', bawanghua:'广东', suansun:'广西', wuzhimaotao:'广东',
   yangtao:'广东', jiecai:'广东', mushu:'广西', chaoshanxianniuwan:'广东',
   zengchengguahailizhi:'广东', xuwenboluo:'广东', wenchangji:'海南', meizhoujinyou:'广东', shajinghao:'广东',
+  dajiao:'广东', meicai:'广东', shage:'广东', fenge:'广东', zhuzhe:'广东', mumianhua:'广东',
+  luohanguo:'广西', shatangju:'广东', wogan:'广西', huangdenglongjiao:'海南',
+  puningdoujiang:'广东', ganlancai:'广东', nanjiang:'广东', lingyu:'广东',
   /* 西南 */
   zheergen:'四川', ercai:'四川', wandouxian:'四川', paojiao:'四川', paojiang:'四川',
   erjingtiao:'四川', qinghuajiao:'四川', songrong:'云南', niuganjun:'云南', jianshouqing:'云南',
@@ -1276,6 +1298,9 @@ const MONTHS = {
   yangchengdazhaxie:[9,10,11], shajinghao:[11,12,1,2], pangxie:[9,10,11],
   dandongcaomei:[1,2,3,4,5], hongshancaotai:[12,1,2], weixianluobo:[10,11,12,1],
   dalianhaishen:[11,12,1,2],
+  /* 华南 */
+  dajiao:[7,8,9,10], shatangju:[11,12,1], wogan:[1,2,3], huangpi:[6,7],
+  shage:[10,11,12], fenge:[11,12,1], zhuzhe:[11,12,1], mumianhua:[3,4],
 };
 for (const [id, ms] of Object.entries(MONTHS)){
   const f = FOOD_MAP[id];
