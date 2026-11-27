@@ -557,7 +557,7 @@ function baseDays(food, storage){
    状态
    ========================================================= */
 const LS_KEY = 'zhizhiv1';
-const APP_VERSION = 'v0.13';
+const APP_VERSION = 'v0.14';
 
 let state = {
   items: [],
@@ -768,8 +768,8 @@ function wineBlock(w){
   </div>`;
 }
 
-function noteStrip(t){
-  return `<div class="snote">💧 ${t}</div>`;
+function noteStrip(t, icon){
+  return `<div class="snote">${icon || '💧'} ${t}</div>`;
 }
 
 function modBlock(m){
@@ -1131,6 +1131,7 @@ function renderAddConfirm(){
     ${food && food.alcohol ? wineBlock(food.alcohol) : ''}
     ${food && food.mod ? modBlock(food.mod) : ''}
     ${food && food.note ? noteStrip(food.note) : ''}
+    ${food && food.perish ? noteStrip('这类东西放不住，当天吃不完就冷冻，别留到第二天。', '⏱') : ''}
     <div class="field">
       <label>食材</label>
       <input type="text" id="dName" value="${escapeHtml(draft.name)}">
@@ -1277,6 +1278,7 @@ function renderDetail(){
     ${food && food.alcohol ? wineBlock(food.alcohol) : ''}
     ${food && food.mod ? modBlock(food.mod) : ''}
     ${food && food.note ? noteStrip(food.note) : ''}
+    ${food && food.perish ? noteStrip('这类东西放不住，当天吃不完就冷冻，别留到第二天。', '⏱') : ''}
 
     <div class="field">
       <label>名字${food && (food.region || food.months) ? `<span class="rl">${[food.region, food.prov, food.months ? food.months.join('/') + '月' : ''].filter(Boolean).join(' · ')}</span>` : ''}</label>

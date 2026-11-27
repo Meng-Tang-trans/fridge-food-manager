@@ -803,6 +803,12 @@ const COOK_RISKS = {
     body: '香椿的硝酸盐含量在蔬菜里算很高的，放久了会转成亚硝酸盐，老叶比嫩芽高得多。室温放一天，亚硝酸盐能翻好几倍。',
     action: '选嫩芽、现买现吃，别囤着。下锅前先用沸水焯 1 分钟——这一步能去掉大部分亚硝酸盐，别省。焯完再炒或凉拌。'
   },
+  oxalate: {
+    label: '建议飞水',
+    tag: '草酸偏高',
+    body: '菠菜、苋菜、竹笋这类草酸含量高，会和钙结合成草酸钙——既影响钙吸收，也是肾结石最常见的成分。',
+    action: '下锅前用沸水飞一下，30 秒到 1 分钟就够，能去掉大部分草酸。有肾结石史、老人小孩更值得这么做。汤底别喝。'
+  },
 };
 
 const COOK_FOODS = {
@@ -815,7 +821,15 @@ const COOK_FOODS = {
   xianyu:'fresh', jiyu:'fresh', caoyu:'fresh', niuga:'fresh',
   biqi:'water', lingjiao:'water', lianou:'water',
   xiangchun:'nitrite',
+  bocai:'oxalate', xiancai:'oxalate', zhusun:'oxalate',
+  jiaobai:'oxalate', tiancaigen:'oxalate', kongxincai:'oxalate',
 };
+
+/* 易腐败：默认存储方式下只有 1 天以内的，买回来就得当天处理 */
+for (const f of FOODS){
+  const d = f[f.def];
+  f.perish = (d != null && d <= 1);
+}
 for (const [id, key] of Object.entries(COOK_FOODS)){
   const f = FOOD_MAP[id];
   if (f) f.cook = COOK_RISKS[key];
